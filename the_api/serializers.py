@@ -5,5 +5,8 @@ from account.models import USERS
 class USER_REGISTRATION(ModelSerializer):
     class Meta:
         model = USERS
-        fields = "__all__"
+        fields = ('username', 'firstname', 'lastname', 'email', 'password')
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
 
