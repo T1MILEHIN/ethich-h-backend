@@ -17,7 +17,6 @@ class UserManager(BaseUserManager):
             username=username, 
             firstname=firstname,
             lastname=lastname,
-            password=password
             **extra_fields
         )
         # user.set_password(password)
@@ -45,7 +44,7 @@ class USERS(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    # REQUIRED_FIELDS = ['username', "firstname", "lastname"]
+    REQUIRED_FIELDS = ['username', "firstname", "lastname"]
 
     def __str__(self):
         return self.email
