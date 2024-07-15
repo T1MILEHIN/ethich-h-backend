@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+)
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListCreateAPIView
 from rest_framework import viewsets, status
@@ -24,11 +28,20 @@ def usercreation(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-        
-    
-
-
 class USERCREATION(ListCreateAPIView):
     queryset =  USERS.objects.all()
     serializer_class = USER_REGISTRATION
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Add custom claims to the token
+        token["username"] = user.username
+        token["email"] = user.email
+        return token
+    
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
