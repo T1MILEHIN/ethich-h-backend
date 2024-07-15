@@ -19,7 +19,7 @@ class UserManager(BaseUserManager):
             lastname=lastname,
             **extra_fields
         )
-        # user.set_password(password)
+        user.password = password
         user.save()
         return user
     
