@@ -12,7 +12,7 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, firstname=firstname, lastname=lastname, **extra_fields)
         user.set_password(password)  # This hashes the password
-        user.save(using=self._db)
+        user.save()
         return user
 
     
@@ -32,7 +32,6 @@ class USERS(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now_add=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    wallet = models.IntegerField(default=0)
 
     objects = UserManager()
 

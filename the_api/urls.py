@@ -3,9 +3,10 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenBlacklistView
 )
-from .views import usercreation, MyTokenObtainPairView
+from .views import usercreation, USERCREATION, MyTokenObtainPairView
 
 urlpatterns = [
+    # path('register/', USERCREATION.as_view()),
     path('register/', usercreation),
     path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 

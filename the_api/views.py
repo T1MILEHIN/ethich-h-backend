@@ -18,14 +18,17 @@ def usercreation(request):
         # Fetch all users
         users = USERS.objects.all()
         serializer = USER_REGISTRATION(users, many=True)
+        for item in serializer.data:
+            if item['profile_image']:
+                item['profile_image'] = request.build_absolute_uri(item['profile_image'])
         return Response(serializer.data)
     
     elif request.method == 'POST':
-        # Create a new user
         serializer = USER_REGISTRATION(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class USERCREATION(ListCreateAPIView):
