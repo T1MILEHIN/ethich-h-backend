@@ -1,27 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
-from django.utils import timezone
 
 # Create your models here.
 
 class UserManager(BaseUserManager):
     def create_user(self, email, username, firstname, lastname, password=None, **extra_fields):
-        if not username:
-            raise ValueError("Must input a Username")
         if not email:
-            raise ValueError( "Must have a valid email address")
-        
+            raise ValueError("The Email field must be set")
+        if not username:
+            raise ValueError("The Username field must be set")
         email = self.normalize_email(email)
-        user = self.model(
-            email=email,
-            username=username, 
-            firstname=firstname,
-            lastname=lastname,
-            **extra_fields
-        )
-        user.set_password(password)
-        user.save()
+        user = self.model(email=email, username=username, firstname=firstname, lastname=lastname, **extra_fields)
+        user.set_password(password)  # This hashes the password
+        user.save(using=self._db)
         return user
+
     
     def create_superuser(self, email, username, firstname, lastname, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
