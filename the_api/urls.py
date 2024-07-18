@@ -3,7 +3,13 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenBlacklistView
 )
-from .views import usercreation, USERCREATION, MyTokenObtainPairView
+from .views import usercreation, USERCREATION, MyTokenObtainPairView,paymentStatusView
+from rest_framework.routers import DefaultRouter
+
+
+
+router = DefaultRouter()
+router.register(r'payment-status', paymentStatusView)
 
 urlpatterns = [
     # path('register/', USERCREATION.as_view()),
@@ -12,4 +18,6 @@ urlpatterns = [
 
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
+    
+    path('', include(router.urls)),
 ]
