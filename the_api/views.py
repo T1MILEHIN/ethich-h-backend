@@ -12,8 +12,8 @@ from .models import paymentStatus
 from django.conf import settings
 
 from rest_framework import viewsets
-from the_api.models import paymentStatus
-from .serializers import USER_REGISTRATION, paymentStatusSerialiizer
+from the_api.models import paymentStatus, PaymentPlan
+from .serializers import USER_REGISTRATION, paymentStatusSerialiizer, PaymentPlanSerializer
 
 # Create your views here.
 
@@ -33,8 +33,12 @@ def usercreation(request):
         if serializer.is_valid():
            user = serializer.save()
             
+            # create paymentplan for new user
+            
+           payment_plan = PaymentPlan.objects.create(user=user)
+            
             # Create PaymentStatus for the new user
-           paymentStatus.objects.create(user=user, payment_status=False)
+           paymentStatus.objects.create(user=user, payment_status=False, payment_plan=payment_plan)
             
            return Response(serializer.data, status=status.HTTP_201_CREATED)
         
@@ -61,3 +65,9 @@ class MyTokenObtainPairView(TokenObtainPairView):
 class paymentStatusView(viewsets.ModelViewSet):
     queryset = paymentStatus.objects.all()
     serializer_class = paymentStatusSerialiizer
+    
+    
+
+class paymentPlanView(viewsets.ModelViewSet):
+    queryset = PaymentPlan.objects.all()
+    serializer_class = PaymentPlanSerializer
